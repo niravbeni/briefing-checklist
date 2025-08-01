@@ -1,0 +1,20 @@
+export const servicePrinciples = [
+  "Always greet guests with a warm smile and genuine enthusiasm.",
+  "Anticipate guest needs before they have to ask.",
+  "Every interaction is an opportunity to exceed expectations.",
+  "Listen actively to understand, not just to respond.",
+  "Take ownership of problems and see them through to resolution.",
+  "Be proactive in offering assistance and information.",
+  "Maintain a professional appearance and positive attitude at all times.",
+  "Remember that small gestures often make the biggest impact.",
+  "Treat every guest as if they were a VIP visiting your home.",
+  "Follow up to ensure guest satisfaction and build lasting relationships.",
+  "Be knowledgeable about building amenities and local recommendations.",
+  "Handle complaints with empathy and turn them into opportunities.",
+  "Work as a team to create seamless guest experiences.",
+  "Pay attention to details that others might overlook.",
+  "Create memorable moments that guests will share with others.",
+  "Be adaptable and flexible to meet changing guest needs.",
+  "Show appreciation for guests choosing to visit our building.",
+  "Maintain confidentiality and respect guest privacy at all times."
+] 
