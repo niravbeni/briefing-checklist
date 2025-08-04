@@ -67,7 +67,7 @@ export default function Home() {
     {
       id: 5,
       title: "5. Principles",
-      description: "Answer a randomised prompt about one of the principles.",
+      description: "Answer this question about one of the principles.",
       type: "principles",
       items: [],
       timeEstimate: "2 min",

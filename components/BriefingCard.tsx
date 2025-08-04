@@ -150,7 +150,7 @@ export default function BriefingCard({
           {type === 'principles' && showRandomizer && mounted && currentRandomContent && (
             <div className="text-left space-y-1 px-2">
               {currentRandomContent.split('\n').map((line, index) => (
-                <p key={index} className={index === 0 ? "text-xs font-semibold text-primary mb-2" : "text-sm text-primary/80 leading-relaxed"}>
+                <p key={index} className={index === 0 ? "text-base font-semibold text-primary mb-2" : "text-lg text-primary/80 leading-relaxed"}>
                   {line}
                 </p>
               ))}
