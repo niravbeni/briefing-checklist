@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Plus, Copy, Send, X } from 'lucide-react'
+import { Plus, Copy, X } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
 interface TodoItem {
@@ -60,24 +60,7 @@ export default function TodoSection() {
     }
   }
 
-  const sendTodos = async () => {
-    if (todos.length === 0) {
-      toast({
-        title: "No todos to send",
-        description: "Add some todos first before sending.",
-        variant: "destructive",
-      })
-      return
-    }
 
-    // Simulate sending - in real implementation, this would call your Zapier webhook
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "Your todo list has been sent successfully.",
-      })
-    }, 500)
-  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -86,37 +69,32 @@ export default function TodoSection() {
   }
 
   return (
-    <Card className="w-full h-full flex flex-col shadow-lg border-gray-200 max-h-full overflow-hidden">
-      <CardHeader className="pb-4 flex-shrink-0 bg-gradient-to-r from-primary/5 to-primary/10 rounded-t-lg">
-        <CardTitle className="flex items-center justify-between text-xl font-bold text-gray-800">
-          <span>To-Do's</span>
-          <div className="flex space-x-3">
+    <Card className="w-full h-full flex flex-col shadow-sm border-gray-200 max-h-full overflow-hidden">
+      <CardHeader className="pb-2 flex-shrink-0">
+        <CardTitle className="flex items-start justify-between text-lg font-semibold leading-tight">
+          <div className="flex flex-col items-start">
+            <span className="text-gray-900">To do's</span>
+            <div className="mt-2">
+              <p className="text-sm text-gray-600 leading-relaxed font-normal">Share updated planning</p>
+            </div>
+          </div>
+          <div className="flex space-x-2 mt-1">
             <Button
-              variant="outline"
-              size="sm"
               onClick={copyToClipboard}
-              className="text-primary hover:text-primary hover:bg-primary/10 text-sm font-medium transition-all duration-200"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md transition-all duration-200"
             >
-              <Copy className="h-4 w-4 mr-2" />
-              Copy
-            </Button>
-            <Button
-              size="sm"
-              onClick={sendTodos}
-              className="bg-primary hover:bg-primary/90 text-sm font-medium shadow-md transition-all duration-200"
-            >
-              <Send className="h-4 w-4 mr-2" />
-              Send
+              <Copy className="h-4 w-4" />
+              <span className="font-medium">Copy</span>
             </Button>
           </div>
         </CardTitle>
       </CardHeader>
       
-      <CardContent className="flex-grow flex flex-col space-y-4 p-4 pb-6 min-h-0 overflow-hidden">
+      <CardContent className="flex-grow flex flex-col space-y-4 px-4 pt-2 pb-6 min-h-0 overflow-hidden">
         {/* Add new todo */}
         <div className="flex space-x-3 flex-shrink-0">
           <Input
-            placeholder="Add a new todo..."
+            placeholder="Add new to-do"
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
             onKeyPress={handleKeyPress}
@@ -147,14 +125,14 @@ export default function TodoSection() {
                 {todos.map((todo) => (
                   <div
                     key={todo.id}
-                    className="flex items-center justify-between p-3 bg-gradient-to-r from-white to-gray-50 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200"
+                    className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 hover:shadow-sm transition-all duration-200"
                   >
                     <span className="text-sm flex-1 pr-3 text-gray-700">{todo.text}</span>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => removeTodo(todo.id)}
-                      className="h-7 w-7 text-gray-400 hover:text-red-500 hover:bg-red-50 flex-shrink-0 transition-colors rounded-full"
+                      className="h-6 w-6 text-gray-400 hover:text-red-500 hover:bg-red-50 flex-shrink-0 transition-colors rounded-md"
                     >
                       <X className="h-3 w-3" />
                     </Button>
@@ -163,12 +141,7 @@ export default function TodoSection() {
               </div>
             </div>
           ) : (
-            <div className="h-full flex items-center justify-center text-muted-foreground">
-              <div className="text-center">
-                <p className="text-base font-medium">No todos yet</p>
-                <p className="text-sm mt-1 opacity-75">Add one above to get started!</p>
-              </div>
-            </div>
+            <div className="h-full"></div>
           )}
         </div>
       </CardContent>
