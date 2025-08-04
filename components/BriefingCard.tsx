@@ -15,6 +15,12 @@ interface BriefingCardProps {
   timeEstimate: string
   showRandomizer?: boolean
   randomContent?: string[]
+  cardIndex: number
+  isActive: boolean
+  timer?: {remaining: number, isRunning: boolean, originalTime: number, isReset: boolean}
+  onComplete: (cardIndex: number, isCompleted: boolean) => void
+  onStartTimer: (cardIndex: number, timeStr: string) => void
+  formatTime: (seconds: number) => string
 }
 
 export default function BriefingCard({
@@ -25,7 +31,13 @@ export default function BriefingCard({
   helperText,
   timeEstimate,
   showRandomizer = false,
-  randomContent = []
+  randomContent = [],
+  cardIndex,
+  isActive,
+  timer,
+  onComplete,
+  onStartTimer,
+  formatTime
 }: BriefingCardProps) {
   const [completed, setCompleted] = useState(false)
   const [itemsChecked, setItemsChecked] = useState<boolean[]>([])
@@ -60,6 +72,9 @@ export default function BriefingCard({
     // Update main completed state based on all items
     const allChecked = newItemsChecked.every(item => item)
     setCompleted(allChecked)
+    
+    // Notify parent component about completion
+    onComplete(cardIndex, allChecked)
   }
 
   const handleMainCheck = (checked: boolean) => {
@@ -67,6 +82,9 @@ export default function BriefingCard({
     // Also check/uncheck all sub-items
     const newItemsChecked = new Array(items.length).fill(checked)
     setItemsChecked(newItemsChecked)
+    
+    // Notify parent component about completion
+    onComplete(cardIndex, checked)
   }
 
   const getIcon = (iconType: string) => {
@@ -83,7 +101,11 @@ export default function BriefingCard({
   }
 
   return (
-    <Card className="h-full max-h-full overflow-hidden shadow-lg border-gray-200 hover:shadow-xl transition-shadow duration-200 flex flex-col">
+    <Card className={`h-full max-h-full overflow-hidden transition-all duration-300 flex flex-col ${
+      isActive 
+        ? 'border-primary border-2 bg-gradient-to-br from-primary/5 to-primary/10' 
+        : 'border-gray-200 border-2'
+    }`}>
       <CardHeader className="pb-4 flex-shrink-0">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -172,11 +194,19 @@ export default function BriefingCard({
           </div>
         )}
         
-        {/* Time estimate at bottom */}
+        {/* Time estimate/timer at bottom */}
         <div className="mt-auto pt-4 flex-shrink-0">
-          <div className="bg-primary text-primary-foreground px-4 py-3 rounded-lg text-center w-full">
-            <span className="text-base font-medium">{timeEstimate}</span>
-          </div>
+          <Button
+            onClick={() => onStartTimer(cardIndex, timeEstimate)}
+            disabled={timer?.isRunning}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-3 rounded-lg text-center w-full transition-all duration-200 disabled:opacity-70"
+          >
+            <span className="text-base font-medium">
+              {timer?.isRunning ? formatTime(timer.remaining) : 
+               timer?.remaining === 0 ? "Done" : 
+               timeEstimate}
+            </span>
+          </Button>
         </div>
       </CardContent>
     </Card>

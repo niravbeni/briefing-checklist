@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import BriefingCard from '@/components/BriefingCard'
 import TodoSection from '@/components/TodoSection'
 import { defaultPrinciples } from '@/data/service-principles'
 
 export default function Home() {
   const [servicePrinciples] = useState(defaultPrinciples)
+  const [activeCardIndex, setActiveCardIndex] = useState(0)
+  const [timers, setTimers] = useState<{[key: number]: {remaining: number, isRunning: boolean, originalTime: number, isReset: boolean}}>({})
 
   // Get current date formatted nicely
   const getCurrentDate = () => {
@@ -19,6 +21,99 @@ export default function Home() {
     }
     return today.toLocaleDateString('en-US', options)
   }
+
+  // Parse time string to seconds
+  const parseTimeToSeconds = (timeStr: string) => {
+    const minutes = parseInt(timeStr.replace(' min', ''))
+    return minutes * 60
+  }
+
+  // Format seconds to MM:SS
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  // Handle card completion - move to next card
+  const handleCardComplete = (cardIndex: number, isCompleted: boolean) => {
+    if (isCompleted && cardIndex === activeCardIndex) {
+      // If this is the last card (principles card), remove highlight
+      if (cardIndex === briefingCards.length - 1) {
+        setActiveCardIndex(-1) // No card highlighted
+      } else {
+        // Move to next uncompleted card
+        const nextIndex = cardIndex + 1
+        if (nextIndex < briefingCards.length) {
+          setActiveCardIndex(nextIndex)
+        }
+      }
+    } else if (!isCompleted && cardIndex < activeCardIndex) {
+      // If unchecking a previous card, move active back to it
+      setActiveCardIndex(cardIndex)
+    } else if (!isCompleted && cardIndex === briefingCards.length - 1) {
+      // If unchecking the last card, make it active again
+      setActiveCardIndex(cardIndex)
+    }
+  }
+
+  // Start/handle timer for a card
+  const startTimer = (cardIndex: number, timeStr: string) => {
+    const currentTimer = timers[cardIndex]
+    const seconds = parseTimeToSeconds(timeStr)
+    
+    // If timer is done (remaining === 0), reset to show original time
+    if (currentTimer?.remaining === 0 && !currentTimer.isRunning) {
+      setTimers(prev => ({
+        ...prev,
+        [cardIndex]: {
+          remaining: seconds,
+          isRunning: false,
+          originalTime: seconds,
+          isReset: true
+        }
+      }))
+    } else {
+      // Start or restart the countdown
+      setTimers(prev => ({
+        ...prev,
+        [cardIndex]: {
+          remaining: seconds,
+          isRunning: true,
+          originalTime: seconds,
+          isReset: false
+        }
+      }))
+    }
+  }
+
+  // Timer countdown effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimers(prev => {
+        const updated = { ...prev }
+        Object.keys(updated).forEach(key => {
+          const cardIndex = parseInt(key)
+          const timer = updated[cardIndex]
+          if (timer.isRunning && timer.remaining > 0) {
+            updated[cardIndex] = {
+              ...timer,
+              remaining: timer.remaining - 1
+            }
+          } else if (timer.isRunning && timer.remaining <= 0) {
+            updated[cardIndex] = {
+              ...timer,
+              isRunning: false,
+              isReset: false
+            }
+          }
+        })
+        return updated
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   // Hardcoded briefing cards content
   const briefingCards = [
@@ -93,7 +188,7 @@ export default function Home() {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6 flex-shrink-0"
         style={{ height: '52vh', maxHeight: '52vh', overflow: 'hidden' }}
       >
-                 {briefingCards.map((card) => (
+                 {briefingCards.map((card, index) => (
            <BriefingCard
              key={card.id}
              title={card.title}
@@ -104,6 +199,12 @@ export default function Home() {
              timeEstimate={card.timeEstimate}
              showRandomizer={card.showRandomizer}
              randomContent={card.randomContent || []}
+             cardIndex={index}
+             isActive={index === activeCardIndex}
+             timer={timers[index]}
+             onComplete={handleCardComplete}
+             onStartTimer={startTimer}
+             formatTime={formatTime}
            />
          ))}
       </div>
