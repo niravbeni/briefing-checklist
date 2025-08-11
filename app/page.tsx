@@ -38,6 +38,17 @@ export default function Home() {
 
   // Handle card completion - move to next card
   const handleCardComplete = (cardIndex: number, isCompleted: boolean) => {
+    // Stop timer when card is completed
+    if (isCompleted) {
+      setTimers(prev => ({
+        ...prev,
+        [cardIndex]: {
+          ...prev[cardIndex],
+          isRunning: false
+        }
+      }))
+    }
+
     if (isCompleted && cardIndex === activeCardIndex) {
       // If this is the last card (principles card), remove highlight
       if (cardIndex === briefingCards.length - 1) {
