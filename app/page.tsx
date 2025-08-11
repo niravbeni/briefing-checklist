@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import BriefingCard from '@/components/BriefingCard'
 import TodoSection from '@/components/TodoSection'
+import StoryOfTheDay from '@/components/StoryOfTheDay'
 import { defaultPrinciples } from '@/data/service-principles'
 
 export default function Home() {
@@ -172,46 +173,50 @@ export default function Home() {
   ]
 
   return (
-    <div className="h-screen flex flex-col p-3 sm:p-4 overflow-hidden">
-      {/* Header */}
-      <div className="flex justify-between items-end py-2 sm:py-3 flex-shrink-0 mb-4">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
-          Daily Briefing
-        </h1>
-        <div className="text-xs sm:text-sm text-gray-600 font-normal">
-          {getCurrentDate()}
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 xl:p-12">
+      <div className="max-w-none mx-auto">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end py-2 sm:py-3 mb-4 sm:mb-6 space-y-2 sm:space-y-0">
+          <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">
+            Daily Briefing
+          </h1>
+          <div className="text-xs sm:text-sm text-gray-600 font-normal">
+            {getCurrentDate()}
+          </div>
         </div>
-      </div>
 
-      {/* Main cards grid */}
-      <div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6 flex-shrink-0"
-        style={{ height: '52vh', maxHeight: '52vh', overflow: 'hidden' }}
-      >
-                 {briefingCards.map((card, index) => (
-           <BriefingCard
-             key={card.id}
-             title={card.title}
-             description={card.description}
-             type={card.type}
-             items={card.items}
-             helperText={card.helperText}
-             timeEstimate={card.timeEstimate}
-             showRandomizer={card.showRandomizer}
-             randomContent={card.randomContent || []}
-             cardIndex={index}
-             isActive={index === activeCardIndex}
-             timer={timers[index]}
-             onComplete={handleCardComplete}
-             onStartTimer={startTimer}
-             formatTime={formatTime}
-           />
-         ))}
-      </div>
+        {/* Story of the Day */}
+        <div className="mb-4 sm:mb-6">
+          <StoryOfTheDay />
+        </div>
 
-      {/* Todo Section */}
-      <div className="flex-1 min-h-0">
-        <TodoSection />
+        {/* Main cards grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+          {briefingCards.map((card, index) => (
+            <BriefingCard
+              key={card.id}
+              title={card.title}
+              description={card.description}
+              type={card.type}
+              items={card.items}
+              helperText={card.helperText}
+              timeEstimate={card.timeEstimate}
+              showRandomizer={card.showRandomizer}
+              randomContent={card.randomContent || []}
+              cardIndex={index}
+              isActive={index === activeCardIndex}
+              timer={timers[index]}
+              onComplete={handleCardComplete}
+              onStartTimer={startTimer}
+              formatTime={formatTime}
+            />
+          ))}
+        </div>
+
+        {/* Todo Section */}
+        <div className="mb-6">
+          <TodoSection />
+        </div>
       </div>
     </div>
   )

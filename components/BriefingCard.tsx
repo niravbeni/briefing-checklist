@@ -101,46 +101,46 @@ export default function BriefingCard({
   }
 
   return (
-    <Card className={`h-full max-h-full overflow-hidden transition-all duration-300 flex flex-col ${
+    <Card className={`transition-all duration-300 flex flex-col ${
       isActive 
         ? 'border-primary border-2 bg-gradient-to-br from-primary/5 to-primary/10' 
         : 'border-gray-200 border-2'
     }`}>
-      <CardHeader className="pb-4 flex-shrink-0">
+      <CardHeader className="pb-3 sm:pb-4">
         <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <CardTitle className="text-lg font-semibold leading-tight">{title}</CardTitle>
+          <div className="flex-1 pr-2">
+            <CardTitle className="text-base sm:text-lg font-semibold leading-tight break-words">{title}</CardTitle>
           </div>
           <div className="flex items-center space-x-2">
             <Checkbox
               checked={completed}
               onCheckedChange={handleMainCheck}
-              className="h-5 w-5 flex-shrink-0 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+              className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
             />
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col px-4 py-0 pb-4 overflow-hidden">
+      <CardContent className="flex-1 flex flex-col px-3 sm:px-4 py-0 pb-4 sm:pb-6">
         {/* Description */}
         {description && (
-          <div className="mb-6 flex-shrink-0">
-            <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+          <div className="mb-4 sm:mb-6">
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed break-words">{description}</p>
           </div>
         )}
 
-        <div className="flex-1 flex flex-col justify-center min-h-0">
+        <div className="flex-1 flex flex-col justify-center">
           {/* Type-specific content */}
           {type === 'manifesto' && (
-            <div className="space-y-4 px-2">
+            <div className="space-y-3 sm:space-y-4 px-1 sm:px-2 mb-4">
               {items.map((item: any, index: number) => (
-                <div key={index} className="flex items-start space-x-3">
+                <div key={index} className="flex items-start space-x-2 sm:space-x-3">
                   <div className="flex-shrink-0 mt-0.5">
                     {getIcon(item.icon)}
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-primary leading-tight mb-1">{item.text}</p>
-                    <p className="text-sm text-gray-600 leading-relaxed">{item.subtext}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs sm:text-sm font-semibold text-primary leading-tight mb-1 break-words">{item.text}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed break-words">{item.subtext}</p>
                   </div>
                 </div>
               ))}
@@ -148,14 +148,14 @@ export default function BriefingCard({
           )}
 
           {type === 'overview' && (
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center py-6 mb-4">
               <div className="mb-3">
                 <img 
                   src="/arrow.png" 
                   alt="CABS Arrow" 
                   width={40} 
                   height={40}
-                  className="opacity-60"
+                  className="w-10 h-10 opacity-60"
                 />
               </div>
               <p className="text-sm text-gray-400 italic">Overview in CABS.</p>
@@ -163,26 +163,32 @@ export default function BriefingCard({
           )}
 
           {(type === 'hot-zones' || type === 'check-in') && helperText && (
-            <div className="flex items-center justify-center text-center px-3">
-              <p className="text-sm text-gray-400 italic leading-relaxed max-w-full">{helperText}</p>
+            <div className="flex items-center justify-center text-center px-2 sm:px-3 py-6 mb-4">
+              <p className="text-xs sm:text-sm text-gray-400 italic leading-relaxed break-words hyphens-auto">{helperText}</p>
             </div>
           )}
 
           {/* Show random content for principles card */}
-          {type === 'principles' && showRandomizer && mounted && currentRandomContent && (
-            <div className="text-left space-y-1 px-2">
-              {currentRandomContent.split('\n').map((line, index) => (
-                <p key={index} className={index === 0 ? "text-base font-semibold text-primary mb-2" : "text-lg text-primary/80 leading-relaxed"}>
-                  {line}
-                </p>
-              ))}
+          {type === 'principles' && showRandomizer && (
+            <div className="text-left space-y-3 px-1 sm:px-2 py-4 mb-4">
+              {mounted && currentRandomContent ? (
+                currentRandomContent.split('\n').map((line, index) => (
+                  <p key={index} className={index === 0 ? "text-sm sm:text-base font-semibold text-primary mb-2 break-words leading-tight" : "text-sm sm:text-base text-primary/80 leading-relaxed break-words"}>
+                    {line}
+                  </p>
+                ))
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-sm text-gray-400 italic">Loading principle...</p>
+                </div>
+              )}
             </div>
           )}
         </div>
         
         {/* Refresh button for principles card - positioned above time estimate */}
         {type === 'principles' && showRandomizer && (
-          <div className="flex justify-center pt-2 pb-2">
+          <div className="flex justify-center pb-4">
             <Button
               variant="outline"
               size="icon"
@@ -195,13 +201,13 @@ export default function BriefingCard({
         )}
         
         {/* Time estimate/timer at bottom */}
-        <div className="mt-auto pt-4 flex-shrink-0">
+        <div className="mt-auto">
           <Button
             onClick={() => onStartTimer(cardIndex, timeEstimate)}
             disabled={timer?.isRunning}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-3 rounded-lg text-center w-full transition-all duration-200 disabled:opacity-70"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 sm:px-4 py-3 rounded-lg text-center w-full transition-all duration-200 disabled:opacity-70"
           >
-            <span className="text-base font-medium">
+            <span className="text-sm sm:text-base font-medium">
               {timer?.isRunning ? formatTime(timer.remaining) : 
                timer?.remaining === 0 ? "Done" : 
                timeEstimate}

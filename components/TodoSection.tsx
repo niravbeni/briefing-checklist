@@ -69,81 +69,67 @@ export default function TodoSection() {
   }
 
   return (
-    <Card className="w-full h-full flex flex-col shadow-sm border-gray-200 max-h-full overflow-hidden">
-      <CardHeader className="pb-2 flex-shrink-0">
-        <CardTitle className="flex items-start justify-between text-lg font-semibold leading-tight">
+    <Card className="w-full shadow-sm border-gray-200">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex flex-col sm:flex-row sm:items-start sm:justify-between text-base sm:text-lg font-semibold leading-tight space-y-3 sm:space-y-0">
           <div className="flex flex-col items-start">
             <span className="text-gray-900">To do's</span>
             <div className="mt-2">
-              <p className="text-sm text-gray-600 leading-relaxed font-normal">Share updated planning</p>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal break-words">Share updated planning</p>
             </div>
           </div>
-          <div className="flex space-x-2 mt-1">
+          <div className="flex space-x-2 sm:mt-1">
             <Button
               onClick={copyToClipboard}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md transition-all duration-200"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 sm:px-4 py-2 rounded-lg flex items-center space-x-2 shadow-md transition-all duration-200 text-sm"
             >
-              <Copy className="h-4 w-4" />
+              <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
               <span className="font-medium">Copy</span>
             </Button>
           </div>
         </CardTitle>
       </CardHeader>
       
-      <CardContent className="flex-grow flex flex-col space-y-4 px-4 pt-2 pb-6 min-h-0 overflow-hidden">
+      <CardContent className="space-y-4 px-3 sm:px-4 pt-2 pb-6">
         {/* Add new todo */}
-        <div className="flex space-x-3 flex-shrink-0">
+        <div className="flex space-x-2 sm:space-x-3">
           <Input
             placeholder="Add new to-do"
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="flex-1 text-sm shadow-sm border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg"
+            className="flex-1 text-xs sm:text-sm shadow-sm border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary rounded-lg min-w-0"
           />
           <Button 
             onClick={addTodo} 
             size="icon" 
-            className="bg-primary hover:bg-primary/90 h-10 w-10 shadow-md transition-all duration-200 rounded-lg"
+            className="bg-primary hover:bg-primary/90 h-9 w-9 sm:h-10 sm:w-10 shadow-md transition-all duration-200 rounded-lg flex-shrink-0"
           >
-            <Plus className="h-5 w-5" />
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </div>
 
-        {/* Todo list - Scrollable container */}
-        <div className="flex-grow min-h-0 overflow-hidden">
-          {todos.length > 0 ? (
-            <div 
-              className="h-full pr-1 scrollbar-visible" 
-              style={{
-                overflowY: 'scroll',
-                scrollbarWidth: 'thin', 
-                scrollbarColor: '#F472B6 #f1f5f9',
-                scrollbarGutter: 'stable'
-              }}
-            >
-              <div className="space-y-3 pr-1">
-                {todos.map((todo) => (
-                  <div
-                    key={todo.id}
-                    className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 hover:shadow-sm transition-all duration-200"
-                  >
-                    <span className="text-sm flex-1 pr-3 text-gray-700">{todo.text}</span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeTodo(todo.id)}
-                      className="h-6 w-6 text-gray-400 hover:text-red-500 hover:bg-red-50 flex-shrink-0 transition-colors rounded-md"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
-                ))}
+        {/* Todo list */}
+        {todos.length > 0 && (
+          <div className="space-y-3">
+            {todos.map((todo) => (
+              <div
+                key={todo.id}
+                className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 hover:shadow-sm transition-all duration-200"
+              >
+                <span className="text-xs sm:text-sm flex-1 pr-3 text-gray-700 break-words leading-relaxed">{todo.text}</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => removeTodo(todo.id)}
+                  className="h-6 w-6 text-gray-400 hover:text-red-500 hover:bg-red-50 flex-shrink-0 transition-colors rounded-md"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
               </div>
-            </div>
-          ) : (
-            <div className="h-full"></div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   )
