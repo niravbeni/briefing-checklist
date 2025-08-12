@@ -139,7 +139,7 @@ export default function Home() {
         { text: "We bring a growth mindset.", subtext: "Progress over perfection", icon: "growth" },
         { text: "We take charge.", subtext: "Individual ownership, with collective support", icon: "hand" }
       ],
-      timeEstimate: "2 min",
+      timeEstimate: "3 min",
       showRandomizer: false
     },
     {
@@ -148,7 +148,7 @@ export default function Home() {
       description: "What is happening today?",
       type: "overview",
       items: [],
-      timeEstimate: "8 min",
+      timeEstimate: "10 min",
       showRandomizer: false
     },
     {
@@ -158,7 +158,7 @@ export default function Home() {
       type: "hot-zones",
       helperText: "Think of VIPs, large group, critical transitions, room flips, A/V resets, catering swaps, security handoffs.",
       items: [],
-      timeEstimate: "3 min",
+      timeEstimate: "10 min",
       showRandomizer: false
     },
     {
@@ -170,16 +170,6 @@ export default function Home() {
       items: [],
       timeEstimate: "5 min", 
       showRandomizer: false
-    },
-    {
-      id: 5,
-      title: "5. Principles",
-      description: "Answer this question about one of the principles.",
-      type: "principles",
-      items: [],
-      timeEstimate: "2 min",
-      showRandomizer: true,
-      randomContent: servicePrinciples
     }
   ]
 
@@ -202,7 +192,7 @@ export default function Home() {
         </div>
 
         {/* Main cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
           {briefingCards.map((card, index) => (
             <BriefingCard
               key={card.id}
@@ -213,13 +203,9 @@ export default function Home() {
               helperText={card.helperText}
               timeEstimate={card.timeEstimate}
               showRandomizer={card.showRandomizer}
-              randomContent={card.randomContent || []}
               cardIndex={index}
               isActive={index === activeCardIndex}
-              timer={timers[index]}
               onComplete={handleCardComplete}
-              onStartTimer={startTimer}
-              formatTime={formatTime}
             />
           ))}
         </div>

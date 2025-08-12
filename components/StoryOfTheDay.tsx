@@ -22,7 +22,7 @@ const StoryOfTheDay = () => {
         {/* Content */}
         <div className="flex-1">
           <h2 className="text-lg sm:text-xl font-semibold mb-2">
-            Story of the day
+            Story of the day (2 min)
           </h2>
           <p className="text-sm sm:text-base text-white text-opacity-90 leading-relaxed">
             What's a standout story from our guest services history that still inspires today?

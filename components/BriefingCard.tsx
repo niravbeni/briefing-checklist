@@ -14,13 +14,9 @@ interface BriefingCardProps {
   helperText?: string
   timeEstimate: string
   showRandomizer?: boolean
-  randomContent?: string[]
   cardIndex: number
   isActive: boolean
-  timer?: {remaining: number, isRunning: boolean, originalTime: number, isReset: boolean}
   onComplete: (cardIndex: number, isCompleted: boolean) => void
-  onStartTimer: (cardIndex: number, timeStr: string) => void
-  formatTime: (seconds: number) => string
 }
 
 export default function BriefingCard({
@@ -31,38 +27,16 @@ export default function BriefingCard({
   helperText,
   timeEstimate,
   showRandomizer = false,
-  randomContent = [],
   cardIndex,
   isActive,
-  timer,
-  onComplete,
-  onStartTimer,
-  formatTime
+  onComplete
 }: BriefingCardProps) {
   const [completed, setCompleted] = useState(false)
   const [itemsChecked, setItemsChecked] = useState<boolean[]>([])
-  const [currentRandomContent, setCurrentRandomContent] = useState('')
-  const [mounted, setMounted] = useState(false)
-
-  // Fix hydration error by only setting random content on client
-  useEffect(() => {
-    setMounted(true)
-    if (typeof window !== 'undefined' && randomContent.length > 0) {
-      setCurrentRandomContent(randomContent[Math.floor(Math.random() * randomContent.length)])
-    }
-  }, [randomContent])
 
   useEffect(() => {
     setItemsChecked(new Array(items.length).fill(false))
   }, [items])
-
-  const handleRefresh = () => {
-    if (randomContent.length > 1) {
-      const availableContent = randomContent.filter(content => content !== currentRandomContent);
-      const randomIndex = Math.floor(Math.random() * availableContent.length);
-      setCurrentRandomContent(availableContent[randomIndex]);
-    }
-  }
 
   const handleItemCheck = (index: number, checked: boolean) => {
     const newItemsChecked = [...itemsChecked]
@@ -121,7 +95,7 @@ export default function BriefingCard({
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col px-3 sm:px-4 py-0 pb-4 sm:pb-6">
+      <CardContent className="flex-1 flex flex-col px-3 sm:px-4 py-0 pb-0">
         {/* Description */}
         {description && (
           <div className="mb-4 sm:mb-6">
@@ -171,48 +145,20 @@ export default function BriefingCard({
           {/* Show random content for principles card */}
           {type === 'principles' && showRandomizer && (
             <div className="text-left space-y-3 px-1 sm:px-2 py-4 mb-4">
-              {mounted && currentRandomContent ? (
-                currentRandomContent.split('\n').map((line, index) => (
-                  <p key={index} className={index === 0 ? "text-sm sm:text-base font-semibold text-primary mb-2 break-words leading-tight" : "text-sm sm:text-base text-primary/80 leading-relaxed break-words"}>
-                    {line}
-                  </p>
-                ))
-              ) : (
-                <div className="text-center py-4">
-                  <p className="text-sm text-gray-400 italic">Loading principle...</p>
-                </div>
-              )}
+              {/* Removed timer logic */}
             </div>
           )}
         </div>
         
-        {/* Refresh button for principles card - positioned above time estimate */}
-        {type === 'principles' && showRandomizer && (
-          <div className="flex justify-center pb-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleRefresh}
-              className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10 flex-shrink-0 transition-colors border-primary/30"
-            >
-              <RefreshCw className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+        {/* Removed Refresh button for principles card */}
         
-        {/* Time estimate/timer at bottom */}
-        <div className="mt-auto">
-          <Button
-            onClick={() => onStartTimer(cardIndex, timeEstimate)}
-            disabled={timer?.isRunning}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 sm:px-4 py-3 rounded-lg text-center w-full transition-all duration-200 disabled:opacity-70"
-          >
-            <span className="text-sm sm:text-base font-medium">
-              {timer?.isRunning ? formatTime(timer.remaining) : 
-               timer?.remaining === 0 ? "Done" : 
-               timeEstimate}
+        {/* Time estimate at bottom */}
+        <div className="mt-auto -mx-3 sm:-mx-4">
+          <div className="border-t border-primary h-12 text-center w-full flex items-center justify-center">
+            <span className="text-lg sm:text-xl font-medium text-primary">
+              {timeEstimate}
             </span>
-          </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
