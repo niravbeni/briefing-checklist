@@ -14,6 +14,7 @@ interface BriefingCardProps {
   helperText?: string
   timeEstimate: string
   showRandomizer?: boolean
+  randomContent?: string[]
   cardIndex: number
   isActive: boolean
   onComplete: (cardIndex: number, isCompleted: boolean) => void
@@ -27,12 +28,27 @@ export default function BriefingCard({
   helperText,
   timeEstimate,
   showRandomizer = false,
+  randomContent = [],
   cardIndex,
   isActive,
   onComplete
 }: BriefingCardProps) {
   const [completed, setCompleted] = useState(false)
   const [itemsChecked, setItemsChecked] = useState<boolean[]>([])
+  const [currentRandomContent, setCurrentRandomContent] = useState('')
+  const [mounted, setMounted] = useState(false)
+
+  // Fix hydration error by only setting random content on client - ONLY ONCE on mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Set initial random content only once when component mounts and randomContent is available
+  useEffect(() => {
+    if (mounted && randomContent.length > 0 && !currentRandomContent) {
+      setCurrentRandomContent(randomContent[Math.floor(Math.random() * randomContent.length)])
+    }
+  }, [mounted, randomContent, currentRandomContent])
 
   useEffect(() => {
     setItemsChecked(new Array(items.length).fill(false))
@@ -61,6 +77,14 @@ export default function BriefingCard({
     onComplete(cardIndex, checked)
   }
 
+  const handleRefresh = () => {
+    if (randomContent.length > 1) {
+      const availableContent = randomContent.filter(content => content !== currentRandomContent);
+      const randomIndex = Math.floor(Math.random() * availableContent.length);
+      setCurrentRandomContent(availableContent[randomIndex]);
+    }
+  }
+
   const getIcon = (iconType: string) => {
     switch (iconType) {
       case 'team':
@@ -75,7 +99,7 @@ export default function BriefingCard({
   }
 
   return (
-    <Card className={`transition-all duration-300 flex flex-col ${
+    <Card className={`transition-all duration-300 flex flex-col min-h-[350px] ${
       isActive 
         ? 'border-primary border-2 bg-gradient-to-br from-primary/5 to-primary/10' 
         : 'border-gray-200 border-2'
@@ -121,6 +145,14 @@ export default function BriefingCard({
             </div>
           )}
 
+          {type === 'principle' && (
+            <div className="flex flex-col items-center justify-center py-8 mb-4">
+              <div className="text-center">
+                <p className="text-sm text-gray-400 italic">Focus on this principle today</p>
+              </div>
+            </div>
+          )}
+
           {type === 'overview' && (
             <div className="flex flex-col items-center justify-center py-6 mb-4">
               <div className="mb-3">
@@ -144,13 +176,32 @@ export default function BriefingCard({
 
           {/* Show random content for principles card */}
           {type === 'principles' && showRandomizer && (
-            <div className="text-left space-y-3 px-1 sm:px-2 py-4 mb-4">
-              {/* Removed timer logic */}
+            <div className="text-center space-y-4 px-1 sm:px-2 py-6 mb-4">
+              {mounted && currentRandomContent ? (
+                <div className="flex flex-col items-center justify-center space-y-6">
+                  <p className="text-xl sm:text-2xl font-semibold text-primary text-center leading-tight">
+                    {currentRandomContent}
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleRefresh}
+                    className="h-10 w-10 text-primary hover:text-primary hover:bg-primary/10 transition-colors rounded-full border border-primary/30"
+                  >
+                    <RefreshCw className="h-5 w-5" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-sm text-gray-400 italic">Loading principle...</p>
+                </div>
+              )}
             </div>
           )}
         </div>
         
-        {/* Removed Refresh button for principles card */}
+        {/* Refresh button for principles card - positioned above time estimate */}
+        <div className="mt-auto">{/* This section is now moved above */}</div>
         
         {/* Time estimate at bottom */}
         <div className="mt-auto -mx-3 sm:-mx-4">

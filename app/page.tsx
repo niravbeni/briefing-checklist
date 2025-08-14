@@ -131,20 +131,7 @@ export default function Home() {
   const briefingCards = [
     {
       id: 1,
-      title: "1. Manifesto",
-      description: "When have you seen these things happen?",
-      type: "manifesto",
-      items: [
-        { text: "We are one team.", subtext: "We share in each other's victories.", icon: "team" },
-        { text: "We bring a growth mindset.", subtext: "Progress over perfection", icon: "growth" },
-        { text: "We take charge.", subtext: "Individual ownership, with collective support", icon: "hand" }
-      ],
-      timeEstimate: "3 min",
-      showRandomizer: false
-    },
-    {
-      id: 2,
-      title: "2. Overview", 
+      title: "2. Overview",
       description: "What is happening today?",
       type: "overview",
       items: [],
@@ -152,8 +139,8 @@ export default function Home() {
       showRandomizer: false
     },
     {
-      id: 3,
-      title: "3. Hot Zones",
+      id: 2,
+      title: "3. Hot Zones", 
       description: "Which meetings deserve special attention?",
       type: "hot-zones",
       helperText: "Think of VIPs, large group, critical transitions, room flips, A/V resets, catering swaps, security handoffs.",
@@ -162,23 +149,40 @@ export default function Home() {
       showRandomizer: false
     },
     {
-      id: 4,
+      id: 3,
       title: "4. Check-in",
       description: "Anything else that the team needs to know today?",
       type: "check-in",
       helperText: "Think of team member updates, equipment issues, guest feedback, policy updates etc.",
       items: [],
-      timeEstimate: "5 min", 
+      timeEstimate: "5 min",
       showRandomizer: false
+    },
+    {
+      id: 4,
+      title: "5. Principles",
+      description: "Zoom in on one service principles and reflect on how this can shows up today.",
+      type: "principles",
+      items: [],
+      timeEstimate: "3 min", 
+      showRandomizer: true,
+      randomContent: [
+        "Anticipate needs",
+        "Make it personal",
+        "Project calm confidence", 
+        "Stay in tune",
+        "Perfect the details",
+        "Own the journey"
+      ]
     }
   ]
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 xl:p-12">
       <div className="max-w-none mx-auto">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end py-2 sm:py-3 mb-4 sm:mb-6 space-y-2 sm:space-y-0">
-          <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">
+      {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end py-1 sm:py-2 mb-3 sm:mb-4 space-y-2 sm:space-y-0">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900">
             Daily Briefing
           </h1>
           <div className="text-xs sm:text-sm text-gray-600 font-normal">
@@ -191,7 +195,7 @@ export default function Home() {
           <StoryOfTheDay />
         </div>
 
-        {/* Main cards grid */}
+      {/* Main cards grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
           {briefingCards.map((card, index) => (
             <BriefingCard
@@ -203,6 +207,7 @@ export default function Home() {
               helperText={card.helperText}
               timeEstimate={card.timeEstimate}
               showRandomizer={card.showRandomizer}
+              randomContent={card.randomContent || []}
               cardIndex={index}
               isActive={index === activeCardIndex}
               onComplete={handleCardComplete}
@@ -210,9 +215,9 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Todo Section */}
+      {/* Todo Section */}
         <div className="mb-6">
-          <TodoSection />
+        <TodoSection />
         </div>
       </div>
     </div>

@@ -112,24 +112,24 @@ export default function TodoSection() {
         {/* Todo list */}
         {todos.length > 0 && (
           <div className="space-y-3">
-            {todos.map((todo) => (
-              <div
-                key={todo.id}
-                className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 hover:shadow-sm transition-all duration-200"
-              >
+                {todos.map((todo) => (
+                  <div
+                    key={todo.id}
+                    className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 hover:shadow-sm transition-all duration-200"
+                  >
                 <span className="text-xs sm:text-sm flex-1 pr-3 text-gray-700 break-words leading-relaxed">{todo.text}</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeTodo(todo.id)}
-                  className="h-6 w-6 text-gray-400 hover:text-red-500 hover:bg-red-50 flex-shrink-0 transition-colors rounded-md"
-                >
-                  <X className="h-3 w-3" />
-                </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeTodo(todo.id)}
+                      className="h-6 w-6 text-gray-400 hover:text-red-500 hover:bg-red-50 flex-shrink-0 transition-colors rounded-md"
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
+          )}
       </CardContent>
     </Card>
   )
