@@ -74,9 +74,6 @@ export default function TodoSection() {
         <CardTitle className="flex flex-col sm:flex-row sm:items-start sm:justify-between text-base sm:text-lg font-semibold leading-tight space-y-3 sm:space-y-0">
           <div className="flex flex-col items-start">
             <span className="text-gray-900">To do's</span>
-            <div className="mt-2">
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal break-words">Share updated planning</p>
-            </div>
           </div>
           <div className="flex space-x-2 sm:mt-1">
             <Button
