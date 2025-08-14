@@ -4,17 +4,12 @@ import { useState, useEffect } from 'react'
 import BriefingCard from '@/components/BriefingCard'
 import TodoSection from '@/components/TodoSection'
 import StoryOfTheDay from '@/components/StoryOfTheDay'
-import SettingsModal from '@/components/SettingsModal'
-import { Settings } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { defaultPrinciples } from '@/data/service-principles'
 
 export default function Home() {
   const [servicePrinciples] = useState(defaultPrinciples)
   const [activeCardIndex, setActiveCardIndex] = useState(0)
   const [timers, setTimers] = useState<{[key: number]: {remaining: number, isRunning: boolean, originalTime: number, isReset: boolean}}>({})
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   // Get current date formatted nicely
   const getCurrentDate = () => {
@@ -194,14 +189,6 @@ export default function Home() {
             <div className="text-xs sm:text-sm text-gray-600 font-normal">
               {getCurrentDate()}
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSettingsOpen(true)}
-              className="h-8 w-8 text-gray-600 hover:text-gray-900"
-            >
-              <Settings className="h-5 w-5" />
-            </Button>
           </div>
         </div>
 
@@ -232,16 +219,9 @@ export default function Home() {
 
       {/* Todo Section */}
         <div className="mb-6">
-          <TodoSection isAuthenticated={isAuthenticated} />
+          <TodoSection />
         </div>
       </div>
-
-      {/* Settings Modal */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        onAuthenticate={setIsAuthenticated}
-      />
     </div>
   )
 } 

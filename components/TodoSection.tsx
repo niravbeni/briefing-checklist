@@ -4,48 +4,20 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Plus, Copy, X, Calendar } from 'lucide-react'
+import { Plus, Copy, X } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { supabase, Todo, CreateTodoInput } from '@/lib/supabase'
 
-interface TodoSectionProps {
-  isAuthenticated?: boolean
-}
-
-export default function TodoSection({ isAuthenticated = false }: TodoSectionProps) {
+export default function TodoSection() {
   const [todos, setTodos] = useState<Todo[]>([])
   const [newTodo, setNewTodo] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
 
-  // Clear local todos on each page load - they're saved in database
+  // Start with empty todos on each page load - they're saved to database but main page starts fresh
   useEffect(() => {
     setTodos([])
   }, [])
-
-  // Load todos from Supabase only when authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      const loadTodos = async () => {
-        try {
-          const { data, error } = await supabase
-            .from('todos')
-            .select('*')
-            .order('created_at', { ascending: false })
-
-          if (error) throw error
-
-          if (data) {
-            setTodos(data)
-          }
-        } catch (error) {
-          console.error('Error loading todos:', error)
-        }
-      }
-
-      loadTodos()
-    }
-  }, [isAuthenticated])
 
   const addTodo = async () => {
     if (newTodo.trim()) {
@@ -138,29 +110,6 @@ export default function TodoSection({ isAuthenticated = false }: TodoSectionProp
     }
   }
 
-  // Group todos by date for authenticated users
-  const groupTodosByDate = (todos: Todo[]) => {
-    const groups: { [key: string]: Todo[] } = {}
-    
-    todos.forEach(todo => {
-      const date = new Date(todo.created_at).toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      })
-      
-      if (!groups[date]) {
-        groups[date] = []
-      }
-      groups[date].push(todo)
-    })
-    
-    return groups
-  }
-
-  const todoGroups = groupTodosByDate(todos)
-
   return (
     <Card className="w-full shadow-sm border-gray-200">
       <CardHeader className="pb-4">
@@ -200,8 +149,8 @@ export default function TodoSection({ isAuthenticated = false }: TodoSectionProp
           </Button>
         </div>
 
-        {/* Todo list - Only show when NOT authenticated */}
-        {!isAuthenticated && todos.length > 0 && (
+        {/* Todo list */}
+        {todos.length > 0 && (
           <div className="space-y-3">
             {todos.map((todo) => (
               <div
@@ -219,75 +168,6 @@ export default function TodoSection({ isAuthenticated = false }: TodoSectionProp
                 </Button>
               </div>
             ))}
-          </div>
-        )}
-
-        {/* Stored data view for authenticated users */}
-        {isAuthenticated && Object.keys(todoGroups).length > 0 && (
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                <Calendar className="h-5 w-5 mr-2" />
-                Stored Todos by Date
-              </h3>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={async () => {
-                  if (confirm('Are you sure you want to reset the entire database? This action cannot be undone.')) {
-                    try {
-                      const { error } = await supabase
-                        .from('todos')
-                        .delete()
-                        .neq('id', '00000000-0000-0000-0000-000000000000') // Delete all todos
-                      
-                      if (error) throw error
-                      
-                      setTodos([])
-                      toast({
-                        title: "Database reset!",
-                        description: "All todos have been cleared from the database.",
-                      })
-                    } catch (error) {
-                      console.error('Error resetting database:', error)
-                      toast({
-                        title: "Error",
-                        description: "Failed to reset database. Please try again.",
-                        variant: "destructive",
-                      })
-                    }
-                  }
-                }}
-                className="text-xs"
-              >
-                Reset Database
-              </Button>
-            </div>
-            <div className="space-y-6">
-              {Object.entries(todoGroups).map(([date, dateTodos]) => (
-                <div key={date} className="space-y-3">
-                  <h4 className="text-sm font-medium text-gray-700 border-b border-gray-100 pb-2">
-                    {date}
-                  </h4>
-                  <div className="space-y-2 pl-4">
-                    {dateTodos.map((todo) => (
-                      <div
-                        key={todo.id}
-                        className="flex items-center justify-between p-2 bg-gray-50 rounded-md"
-                      >
-                        <span className="text-sm text-gray-600">{todo.text}</span>
-                        <span className="text-xs text-gray-400">
-                          {new Date(todo.created_at).toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         )}
       </CardContent>
