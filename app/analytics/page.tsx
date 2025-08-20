@@ -34,7 +34,7 @@ export default function AnalyticsPage() {
       console.error('Error loading todos:', error)
       toast({
         title: "Error",
-        description: "Failed to load todos from database.",
+        description: "Failed to load key points from database.",
         variant: "destructive",
       })
     } finally {
@@ -55,7 +55,7 @@ export default function AnalyticsPage() {
         setTodos([])
         toast({
           title: "Database reset!",
-          description: "All todos have been cleared from the database.",
+          description: "All key points have been cleared from the database.",
         })
       } catch (error) {
         console.error('Error resetting database:', error)
@@ -124,7 +124,7 @@ export default function AnalyticsPage() {
             <CardContent className="p-6">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">{todos.length}</div>
-                <div className="text-sm text-gray-600">Total Todos</div>
+                <div className="text-sm text-gray-600">Total Key Points</div>
               </div>
             </CardContent>
           </Card>
@@ -154,7 +154,7 @@ export default function AnalyticsPage() {
         {isLoading ? (
           <Card>
             <CardContent className="p-6 text-center">
-              <p className="text-gray-600">Loading todos...</p>
+              <p className="text-gray-600">Loading key points...</p>
             </CardContent>
           </Card>
         ) : Object.keys(todoGroups).length > 0 ? (
@@ -162,14 +162,14 @@ export default function AnalyticsPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Calendar className="h-5 w-5 mr-2" />
-                Todos by Date
+                Key Points by Date
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               {Object.entries(todoGroups).map(([date, dateTodos]) => (
                 <div key={date} className="space-y-3">
                   <h4 className="text-lg font-medium text-gray-700 border-b border-gray-100 pb-2">
-                    {date} ({dateTodos.length} todos)
+                    {date} ({dateTodos.length} key points)
                   </h4>
                   <div className="space-y-2 pl-4">
                     {dateTodos.map((todo) => (
@@ -177,8 +177,13 @@ export default function AnalyticsPage() {
                         key={todo.id}
                         className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
                       >
-                        <span className="text-sm text-gray-700">{todo.text}</span>
-                        <span className="text-xs text-gray-400">
+                        <div className="flex-1">
+                          <span className="text-sm text-gray-700 block">{todo.text}</span>
+                          {todo.owner && (
+                            <span className="text-xs text-gray-500 mt-1 block">Owner: {todo.owner}</span>
+                          )}
+                        </div>
+                        <span className="text-xs text-gray-400 ml-3">
                           {new Date(todo.created_at).toLocaleTimeString('en-US', {
                             hour: '2-digit',
                             minute: '2-digit'
@@ -194,7 +199,7 @@ export default function AnalyticsPage() {
         ) : (
           <Card>
             <CardContent className="p-6 text-center">
-              <p className="text-gray-600">No todos found in the database.</p>
+              <p className="text-gray-600">No key points found in the database.</p>
             </CardContent>
           </Card>
         )}

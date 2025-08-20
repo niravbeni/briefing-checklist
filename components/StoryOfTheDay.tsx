@@ -36,8 +36,8 @@ const StoryOfTheDay = () => {
               {getIcon('team')}
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold leading-tight mb-1" style={{ color: '#FE30B2' }}>We are one team.</p>
-              <p className="text-sm text-white text-opacity-80 leading-relaxed">We share in each other's victories and challenges.</p>
+              <p className="text-base sm:text-lg font-semibold leading-tight mb-2" style={{ color: '#FE30B2' }}>We are one team.</p>
+              <p className="text-sm sm:text-base text-white text-opacity-90 leading-relaxed">We share in each other's victories and challenges.</p>
             </div>
           </div>
           
@@ -46,8 +46,8 @@ const StoryOfTheDay = () => {
               {getIcon('growth')}
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold leading-tight mb-1" style={{ color: '#FE30B2' }}>We bring a growth mindset.</p>
-              <p className="text-sm text-white text-opacity-80 leading-relaxed">In this meeting, we care about progress over perfection.</p>
+              <p className="text-base sm:text-lg font-semibold leading-tight mb-2" style={{ color: '#FE30B2' }}>We bring a growth mindset.</p>
+              <p className="text-sm sm:text-base text-white text-opacity-90 leading-relaxed">In this meeting, we care about progress over perfection.</p>
             </div>
           </div>
           
@@ -56,8 +56,8 @@ const StoryOfTheDay = () => {
               {getIcon('hand')}
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold leading-tight mb-1" style={{ color: '#FE30B2' }}>We take charge.</p>
-              <p className="text-sm text-white text-opacity-80 leading-relaxed">Individual ownership, with collective support.</p>
+              <p className="text-base sm:text-lg font-semibold leading-tight mb-2" style={{ color: '#FE30B2' }}>We take charge.</p>
+              <p className="text-sm sm:text-base text-white text-opacity-90 leading-relaxed">Individual ownership, with collective support.</p>
             </div>
           </div>
         </div>

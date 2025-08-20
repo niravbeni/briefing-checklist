@@ -12,9 +12,11 @@ export interface Todo {
   completed: boolean
   created_at: string
   user_id?: string
+  owner?: string
 }
 
 export interface CreateTodoInput {
   text: string
   completed?: boolean
+  owner?: string
 } 

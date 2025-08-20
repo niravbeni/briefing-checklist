@@ -26,7 +26,8 @@ CREATE TABLE todos (
   text TEXT NOT NULL,
   completed BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-  user_id UUID
+  user_id UUID,
+  owner TEXT
 );
 
 -- Enable Row Level Security (optional)
@@ -45,4 +46,12 @@ CREATE POLICY "Allow all operations" ON todos FOR ALL USING (true);
 ## 6. Security
 - The 4-digit code "4336" controls access to stored data
 - Only authenticated users can see historical todos
-- Regular users can still add/remove todos normally 
+- Regular users can still add/remove todos normally
+
+## 7. Database Migration (if updating existing database)
+If you already have a todos table and want to add the owner field, run this SQL:
+
+```sql
+-- Add owner column to existing todos table
+ALTER TABLE todos ADD COLUMN owner TEXT;
+``` 
