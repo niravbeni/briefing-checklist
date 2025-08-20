@@ -24,9 +24,6 @@ const StoryOfTheDay = () => {
           <h2 className="text-lg sm:text-xl font-semibold mb-2">
             1. Our Culture
           </h2>
-          <p className="text-sm sm:text-base text-white text-opacity-90 leading-relaxed">
-            When have you seen these things happen?
-          </p>
         </div>
         
         {/* Right side - Culture principles */}

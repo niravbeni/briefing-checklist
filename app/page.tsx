@@ -132,7 +132,7 @@ export default function Home() {
     {
       id: 1,
       title: "2. Check-in",
-      description: "Anything else that the team needs to know today?",
+      description: "How is it going?",
       type: "check-in",
       helperText: "Think of team member updates, equipment issues, guest feedback, policy updates etc.",
       items: [],
@@ -161,7 +161,7 @@ export default function Home() {
     {
       id: 4,
       title: "5. Principles",
-      description: "Zoom in on one service principle and reflect on how this can shows up today.",
+      description: "Zoom in on one service principle and reflect on how this can show up today.",
       type: "principles",
       items: [],
       timeEstimate: "3 min", 
